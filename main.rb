@@ -22,3 +22,11 @@ post '/memos' do
   redirect '/'
   erb :index
 end
+
+get '/memos/*' do |memo_id|
+  @memo = File.open('./db/memos.json', 'r') do |memos|
+    memo_data = JSON.load(memos)
+    memo_data['memos'][memo_id.to_i.pred]
+  end
+  erb :show
+end
