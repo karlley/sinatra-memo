@@ -4,8 +4,8 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 
-get '/' do
-  @memos = File.open('./db/memos.json', 'r') { |memos| JSON.load(memos) }
+get '/memos' do
+  @memos = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
   erb :index
 end
 
@@ -19,7 +19,7 @@ post '/memos' do
                           'title': params[:title],
                           'content': params[:content] }
   File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
-  redirect '/'
+  redirect '/memos'
   erb :index
 end
 
