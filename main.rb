@@ -23,6 +23,23 @@ post '/memos' do
   erb :index
 end
 
+get '/memos/*/edit' do |memo_id|
+  memos = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
+  @memo = memos[:memos][memo_id.to_i.pred]
+  erb :edit
+end
+
+patch '/memos/*' do |memo_id|
+  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
+  update_data = { 'id': memo_id.to_i,
+                  'title': params[:title],
+                  'content': params[:content] }
+  memo_data[:memos][memo_id.to_i.pred].update(update_data)
+  File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
+  redirect "/memos/#{memo_id}"
+  erb :show
+end
+
 get '/memos/*' do |memo_id|
   @memo = File.open('./db/memos.json', 'r') do |memos|
     memo_data = JSON.load(memos)
