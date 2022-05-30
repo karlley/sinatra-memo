@@ -14,10 +14,8 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  memo_data = File.open('./db/memos.json', 'r') { |memos| JSON.load(memos) }
-  memo_data['memos'] << { 'id': memo_data['memos'].last['id'].next,
-                          'title': params[:title],
-                          'content': params[:content] }
+  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
+  memo_data[:memos] << { id: memo_data[:memos].last[:id].next, title: params[:title], content: params[:content] }
   File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
   redirect '/memos'
   erb :index
@@ -41,9 +39,7 @@ patch '/memos/*' do |memo_id|
 end
 
 get '/memos/*' do |memo_id|
-  @memo = File.open('./db/memos.json', 'r') do |memos|
-    memo_data = JSON.load(memos)
-    memo_data['memos'][memo_id.to_i.pred]
-  end
+  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
+  @memo = memo_data[:memos][memo_id.to_i.pred]
   erb :show
 end
