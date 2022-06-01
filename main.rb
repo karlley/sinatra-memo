@@ -43,3 +43,12 @@ get '/memos/*' do |memo_id|
   @memo = memo_data[:memos][memo_id.to_i.pred]
   erb :show
 end
+
+delete '/memos/*' do |memo_id|
+  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
+  delete_id = memo_id.to_i.pred
+  memo_data[:memos].delete_at(delete_id)
+  File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
+  redirect '/memos'
+  erb :index
+end
