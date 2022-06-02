@@ -1,5 +1,5 @@
 <ul>
-<% @memos[:memos].each do |memo| %>
+<% @memos.each do |memo| %>
   <li><a href="/memos/<%= memo[:id] %>"><%= memo[:title] %></a></li>
 <% end %>
 </ul>

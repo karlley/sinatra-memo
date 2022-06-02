@@ -3,9 +3,13 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
+require 'securerandom'
 
 get '/memos' do
-  @memos = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
+  files = Dir.glob('./data/*.json')
+  @memos = files.map do |file|
+    JSON.parse(File.read(file), symbolize_names: true)
+  end
   erb :index
 end
 
@@ -14,41 +18,31 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
-  memo_data[:memos] << { id: memo_data[:memos].last[:id].next, title: params[:title], content: params[:content] }
-  File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
+  create_data = { id: SecureRandom.uuid, title: params[:title], content: params[:content] }
+  File.open("./data/#{create_data[:id]}.json", 'w') { |file| JSON.dump(create_data, file) }
   redirect '/memos'
   erb :index
 end
 
-get '/memos/*/edit' do |memo_id|
-  memos = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
-  @memo = memos[:memos][memo_id.to_i.pred]
+get '/memos/:id/edit' do |id|
+  @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
   erb :edit
 end
 
-patch '/memos/*' do |memo_id|
-  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
-  update_data = { 'id': memo_id.to_i,
-                  'title': params[:title],
-                  'content': params[:content] }
-  memo_data[:memos][memo_id.to_i.pred].update(update_data)
-  File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
-  redirect "/memos/#{memo_id}"
+patch '/memos/:id' do |id|
+  update_data = { id: id.to_s, title: params[:title], content: params[:content] }
+  File.open("./data/#{id}.json", 'w') { |file| JSON.dump(update_data, file) }
+  redirect "/memos/#{id}"
   erb :show
 end
 
-get '/memos/*' do |memo_id|
-  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
-  @memo = memo_data[:memos][memo_id.to_i.pred]
+get '/memos/:id' do |id|
+  @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
   erb :show
 end
 
-delete '/memos/*' do |memo_id|
-  memo_data = JSON.parse(File.read('./db/memos.json'), symbolize_names: true)
-  delete_id = memo_id.to_i.pred
-  memo_data[:memos].delete_at(delete_id)
-  File.open('./db/memos.json', 'w') { |memos| JSON.dump(memo_data, memos) }
+delete '/memos/:id' do |id|
+  File.delete("./data/#{id}.json")
   redirect '/memos'
   erb :index
 end
