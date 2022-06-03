@@ -5,6 +5,10 @@ require 'sinatra/reloader'
 require 'json'
 require 'securerandom'
 
+not_found do
+  erb :not_found
+end
+
 get '/memos' do
   files = Dir.glob('./data/*.json').sort_by { |file| File.birthtime(file) }.reverse
   @memos = files.map do |file|
