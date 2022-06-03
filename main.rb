@@ -6,7 +6,7 @@ require 'json'
 require 'securerandom'
 
 get '/memos' do
-  files = Dir.glob('./data/*.json')
+  files = Dir.glob('./data/*.json').sort_by { |file| File.birthtime(file) }.reverse
   @memos = files.map do |file|
     JSON.parse(File.read(file), symbolize_names: true)
   end
