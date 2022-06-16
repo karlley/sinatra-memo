@@ -1,9 +1,20 @@
-<p>Tiltle: <%= @memo[:title] %></p>
-<p>Content: <%= @memo[:content] %></p>
-
-<a href="/memos/<%= @memo[:id] %>/edit">変更</a>
-
-<form action="/memos/<%= @memo[:id] %>" method="post">
-    <input type="hidden" name="_method" value="delete">
-    <input type="submit" value="削除">
-</form>
+<section class="show-wrapper">
+  <h2>Memo Details</h2>
+  <article class="show-item">
+    <div class="show-title">
+      <h3><span class="show-title-header">Title</span><span><%= @memo[:title] %></span></h3>
+    </div>
+    <div class="show-content">
+      <p><span class="show-content-header">Content</span><span><%= @memo[:content] %></span></p>
+    </div>
+  </article>
+  <nav class="show-nav">
+    <div class="show-edit-button">
+      <a href="/memos/<%= @memo[:id] %>/edit">Edit Memo</a>
+    </div>
+    <form action="/memos/<%= @memo[:id] %>" method="post" class="show-delete-button">
+      <input type="hidden" name="_method" value="delete">
+      <input type="submit" value="Delete Memo">
+    </form>
+  </nav>
+</section>
