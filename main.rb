@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 require 'securerandom'
+require_relative 'helpers/crud_helper'
 
 not_found do
   erb :not_found
@@ -29,8 +30,12 @@ post '/memos' do
 end
 
 get '/memos/:id/edit' do |id|
-  @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
-  erb :edit
+  if id_exists?(id)
+    @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
+    erb :edit
+  else
+    erb :not_found
+  end
 end
 
 patch '/memos/:id' do |id|
@@ -41,8 +46,12 @@ patch '/memos/:id' do |id|
 end
 
 get '/memos/:id' do |id|
-  @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
-  erb :show
+  if id_exists?(id)
+    @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
+    erb :show
+  else
+    erb :not_found
+  end
 end
 
 delete '/memos/:id' do |id|
