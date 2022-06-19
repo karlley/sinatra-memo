@@ -31,7 +31,7 @@ end
 
 get '/memos/:id/edit' do |id|
   if memo_exists?(id)
-    @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
+    @memo = get_memo(id)
     erb :edit
   else
     erb :not_found
@@ -47,7 +47,7 @@ end
 
 get '/memos/:id' do |id|
   if memo_exists?(id)
-    @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
+    @memo = get_memo(id)
     erb :show
   else
     erb :not_found
