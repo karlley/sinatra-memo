@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 helpers do
+  def set_title
+    params[:title].empty? ? 'Untitled' : params[:title]
+  end
+
   def id_exists?(id)
     all_files = Dir.glob('./data/*.json')
     all_memos = all_files.map do |file|
