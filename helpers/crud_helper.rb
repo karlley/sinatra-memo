@@ -5,14 +5,10 @@ helpers do
     params[:title].empty? ? 'Untitled' : params[:title]
   end
 
-  def id_exists?(id)
-    all_files = Dir.glob('./data/*.json')
-    all_memos = all_files.map do |file|
-      JSON.parse(File.read(file), symbolize_names: true)
+  def memo_exists?(id)
+    all_ids = Dir.glob('./data/*.json').map do |file|
+      JSON.parse(File.read(file), symbolize_names: true)[:id]
     end
-    all_memos_id = all_memos.map do |memo|
-      memo[:id]
-    end
-    all_memos_id.include?(id)
+    all_ids.include?(id)
   end
 end

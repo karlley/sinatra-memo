@@ -30,7 +30,7 @@ post '/memos' do
 end
 
 get '/memos/:id/edit' do |id|
-  if id_exists?(id)
+  if memo_exists?(id)
     @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
     erb :edit
   else
@@ -46,7 +46,7 @@ patch '/memos/:id' do |id|
 end
 
 get '/memos/:id' do |id|
-  if id_exists?(id)
+  if memo_exists?(id)
     @memo = JSON.parse(File.read("./data/#{id}.json"), symbolize_names: true)
     erb :show
   else
