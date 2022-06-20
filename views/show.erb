@@ -2,10 +2,10 @@
   <h2>Memo Details</h2>
   <article class="show-item">
     <div class="show-title">
-      <h3><span class="show-title-header">Title</span><span><%= @memo[:title] %></span></h3>
+      <h3><span class="show-title-header">Title</span><span><%= CGI.escapeHTML(@memo[:title]) %></span></h3>
     </div>
     <div class="show-content">
-      <p><span class="show-content-header">Content</span><span><%= @memo[:content] %></span></p>
+      <p><span class="show-content-header">Content</span><span><%= CGI.escapeHTML(@memo[:content]) %></span></p>
     </div>
   </article>
   <nav class="show-nav">

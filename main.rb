@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 require 'securerandom'
+require 'cgi'
 require_relative 'helpers/crud_helper'
 
 not_found do

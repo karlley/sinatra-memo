@@ -6,7 +6,8 @@
         <label>Title</label>
       </dt>
       <dd>
-        <input name="title" type="text" value="<%= @memo[:title] %>" class="edit-form-title" required="required">
+        <input name="title" type="text" value="<%= CGI.escapeHTML(@memo[:title]) %>" class="edit-form-title"
+          required="required">
       </dd>
     </dl>
     <dl>
@@ -14,7 +15,7 @@
         <label>Content</label>
       </dt>
       <dd>
-        <textarea name="content" class="edit-form-content"><%= @memo[:content] %></textarea>
+        <textarea name="content" class="edit-form-content"><%= CGI.escapeHTML(@memo[:content]) %></textarea>
       </dd>
     </dl>
     <input type="hidden" name="_method" value="patch">

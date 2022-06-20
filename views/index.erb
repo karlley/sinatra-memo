@@ -4,8 +4,8 @@
     <% @memos.each do |memo| %>
     <li class="index-item">
       <article>
-        <h3>Title: <a href="/memos/<%= memo[:id] %>"><%= memo[:title] %></a></h3>
-        <p><%= memo[:content] %><p>
+        <h3>Title: <a href="/memos/<%= memo[:id] %>"><%= CGI.escapeHTML(memo[:title]) %></a></h3>
+        <p><%= CGI.escapeHTML(memo[:content]) %><p>
       </article>
     </li>
     <% end %>
