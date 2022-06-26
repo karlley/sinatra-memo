@@ -34,6 +34,8 @@ $ bundle install
 $ bundle exec ruby main.rb
 ```
 
+`http://localhost:4567/` にアクセスするとアプリケーションが表示されます。
+
 ## Author
 
 [@karlley](https://twitter.com/home)
