@@ -34,7 +34,7 @@ $ bundle install
 $ bundle exec ruby main.rb
 ```
 
-`http://localhost:4567/` にアクセスするとアプリケーションが表示されます。
+`http://localhost:4567/memos` にアクセスするとアプリケーションが表示されます。
 
 ## Author
 
