@@ -256,6 +256,7 @@ li {
 }
 
 .not_found-wrapper h2 {
+  text-align: center;
   font-size: 100px;
 }
 
