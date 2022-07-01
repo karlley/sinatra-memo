@@ -24,7 +24,7 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  create_data = { id: SecureRandom.uuid, title: set_title, content: params[:content] }
+  create_data = { id: SecureRandom.uuid, title: title_with_default_text, content: params[:content] }
   File.open("data/#{create_data[:id]}.json", 'w') { |file| JSON.dump(create_data, file) }
   redirect '/memos'
   erb :index
@@ -40,7 +40,7 @@ get '/memos/:id/edit' do |id|
 end
 
 patch '/memos/:id' do |id|
-  update_data = { id: id.to_s, title: set_title, content: params[:content] }
+  update_data = { id: id.to_s, title: title_with_default_text, content: params[:content] }
   File.open("data/#{id}.json", 'w') { |file| JSON.dump(update_data, file) }
   redirect "/memos/#{id}"
   erb :show

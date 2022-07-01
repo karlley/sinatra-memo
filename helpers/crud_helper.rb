@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 helpers do
-  def set_title
+  def title_with_default_text
     params[:title].empty? ? 'Untitled' : params[:title]
   end
 
