@@ -40,10 +40,14 @@ get '/memos/:id/edit' do |id|
 end
 
 patch '/memos/:id' do |id|
-  update_data = { id: id.to_s, title: title_with_default_text, content: params[:content] }
-  File.open("data/#{id}.json", 'w') { |file| JSON.dump(update_data, file) }
-  redirect "/memos/#{id}"
-  erb :show
+  if memo_exists?(id)
+    update_data = { id: id.to_s, title: title_with_default_text, content: params[:content] }
+    File.open("data/#{id}.json", 'w') { |file| JSON.dump(update_data, file) }
+    redirect "/memos/#{id}"
+    erb :show
+  else
+    erb :not_found
+  end
 end
 
 get '/memos/:id' do |id|
@@ -56,7 +60,11 @@ get '/memos/:id' do |id|
 end
 
 delete '/memos/:id' do |id|
-  File.delete("data/#{id}.json")
-  redirect '/memos'
-  erb :index
+  if memo_exists?(id)
+    File.delete("data/#{id}.json")
+    redirect '/memos'
+    erb :index
+  else
+    erb :not_found
+  end
 end
