@@ -1,0 +1,22 @@
+<section class="new-wrapper">
+  <h2>New Memo</h2>
+  <form action="/memos" method="post" class="new-form">
+    <dl>
+      <dt>
+        <label>Title</label>
+      </dt>
+      <dd>
+        <input name="title" type="text" class="new-form-title" required="required">
+      </dd>
+    </dl>
+    <dl>
+      <dt>
+        <label>Content</label>
+      </dt>
+      <dd>
+        <textarea name="content" class="new-form-content"></textarea>
+      </dd>
+    </dl>
+    <input type="submit" value="Save Memo" class="new-form-button">
+  </form>
+</section>

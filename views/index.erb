@@ -1,0 +1,16 @@
+<section class="index-wrapper">
+  <h2>All Memos</h2>
+  <ul>
+    <% @memos.each do |memo| %>
+    <li class="index-item">
+      <article>
+        <h3>Title: <a href="/memos/<%= memo[:id] %>"><%= CGI.escapeHTML(memo[:title]) %></a></h3>
+        <p><%= CGI.escapeHTML(memo[:content]) %><p>
+      </article>
+    </li>
+    <% end %>
+  </ul>
+</section>
+<nav class="index-nav">
+  <a href="/memos/new">New Memo</a>
+</nav>
