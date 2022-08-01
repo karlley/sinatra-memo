@@ -6,7 +6,7 @@ require 'json'
 require 'securerandom'
 require 'cgi'
 require 'pg'
-require_relative 'helpers/crud_helper'
+require_relative 'helpers/helper'
 
 before do
   @connection = PG::Connection.new(dbname: 'memo_app') if @connection.nil?
