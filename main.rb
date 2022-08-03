@@ -8,9 +8,11 @@ require 'cgi'
 require 'pg'
 require_relative 'helpers/helper'
 
+DB_NAME = 'memo_app'
+
 before do
-  @connection = PG::Connection.new(dbname: 'memo_app') if @connection.nil?
-  @all_memos = excute_query('SELECT * FROM memos') if @all_memos.nil?
+  @connection = PG::Connection.new(dbname: DB_NAME)
+  @all_memos = excute_query('SELECT * FROM memos')
 end
 
 not_found do
