@@ -9,10 +9,10 @@ require 'pg'
 require_relative 'helpers/helper'
 
 DB_NAME = 'memo_app'
+TABLE_NAME = 'memos'
 
 before do
   @connection = PG::Connection.new(dbname: DB_NAME)
-  @all_memos = excute_query('SELECT * FROM memos')
 end
 
 not_found do
@@ -20,7 +20,7 @@ not_found do
 end
 
 get '/memos' do
-  @memos = @all_memos
+  @memos = fetch_all_memos
   erb :index
 end
 
@@ -29,10 +29,7 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  excute_query(<<~SQL)
-    INSERT INTO memos (id, title, content)
-    VALUES ('#{SecureRandom.uuid}', '#{title_with_default_text}', '#{params[:content]}')
-  SQL
+  create_memo(params[:title], params[:content])
   redirect '/memos'
   erb :index
 end
@@ -48,11 +45,7 @@ end
 
 patch '/memos/:id' do |id|
   if memo_exists?(id)
-    excute_query(<<~SQL)
-      UPDATE memos
-      SET title = '#{title_with_default_text}', content = '#{params[:content]}'
-      WHERE id = '#{id}'
-    SQL
+    update_memo(id, params[:title], params[:content])
     redirect "/memos/#{id}"
     erb :show
   else
@@ -71,7 +64,7 @@ end
 
 delete '/memos/:id' do |id|
   if memo_exists?(id)
-    excute_query("DELETE FROM memos WHERE id = '#{id}'")
+    delete_memo(id)
     redirect '/memos'
     erb :index
   else
