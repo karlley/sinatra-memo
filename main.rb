@@ -8,13 +8,6 @@ require 'cgi'
 require 'pg'
 require_relative 'helpers/helper'
 
-DB_NAME = 'memo_app'
-TABLE_NAME = 'memos'
-
-before do
-  @connection = PG::Connection.new(dbname: DB_NAME)
-end
-
 not_found do
   erb :not_found
 end

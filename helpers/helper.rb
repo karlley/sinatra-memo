@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
+DB_NAME = 'memo_app'
+TABLE_NAME = 'memos'
+
 helpers do
+  def excute_query(sql)
+    connection = PG::Connection.new(dbname: DB_NAME)
+    connection.exec(sql)
+  end
+
   def fetch_all_memos
-    @connection.exec("SELECT * FROM #{TABLE_NAME}")
+    excute_query("SELECT * FROM #{TABLE_NAME}")
   end
 
   def memo_exists?(id)
@@ -12,7 +20,7 @@ helpers do
   end
 
   def find_memo(id)
-    @connection.exec("SELECT * FROM #{TABLE_NAME} WHERE id = '#{id}'").first
+    excute_query("SELECT * FROM #{TABLE_NAME} WHERE id = '#{id}'").first
   end
 
   def title_with_default_text(title)
@@ -20,14 +28,14 @@ helpers do
   end
 
   def create_memo(title, content)
-    @connection.exec(<<~SQL)
+    excute_query(<<~SQL)
       INSERT INTO #{TABLE_NAME} (id, title, content)
       VALUES ('#{SecureRandom.uuid}', '#{title_with_default_text(title)}', '#{content}')
     SQL
   end
 
   def update_memo(id, title, content)
-    @connection.exec(<<~SQL)
+    excute_query(<<~SQL)
       UPDATE memos
       SET title = '#{title_with_default_text(title)}', content = '#{content}'
       WHERE id = '#{id}'
@@ -35,6 +43,6 @@ helpers do
   end
 
   def delete_memo(id)
-    @connection.exec("DELETE FROM #{TABLE_NAME} WHERE id = '#{id}'")
+    excute_query("DELETE FROM #{TABLE_NAME} WHERE id = '#{id}'")
   end
 end
