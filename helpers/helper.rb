@@ -36,7 +36,7 @@ helpers do
 
   def update_memo(id, title, content)
     excute_query(<<~SQL)
-      UPDATE memos
+      UPDATE #{TABLE_NAME}
       SET title = '#{title_with_default_text(title)}', content = '#{content}'
       WHERE id = '#{id}'
     SQL
