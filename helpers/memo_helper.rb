@@ -3,14 +3,15 @@
 DB_NAME = 'memo_app'
 TABLE_NAME = 'memos'
 
-helpers do
+# DB接続、CRUD処理のヘルパー
+module MemoHelper
   def excute(query)
     connection = PG::Connection.new(dbname: DB_NAME)
     connection.exec(query)
   end
 
-  def fetch_all_memos
-    excute("SELECT * FROM #{TABLE_NAME}")
+  def title_with_default_text(title)
+    title.empty? ? 'Untitled' : title
   end
 
   def memo_exists?(id, all_memos)
@@ -18,14 +19,14 @@ helpers do
     all_ids.include?(id)
   end
 
+  def fetch_all_memos
+    excute("SELECT * FROM #{TABLE_NAME}")
+  end
+
   def find_memo(id, all_memos)
     all_memos.map do |memo|
       memo if memo['id'] == id
     end.compact.first
-  end
-
-  def title_with_default_text(title)
-    title.empty? ? 'Untitled' : title
   end
 
   def create_memo(title, content)

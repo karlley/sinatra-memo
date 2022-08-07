@@ -8,6 +8,8 @@ require 'cgi'
 require 'pg'
 require_relative 'helpers/helper'
 
+helpers MemoHelper
+
 not_found do
   erb :not_found
 end
