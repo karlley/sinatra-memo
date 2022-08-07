@@ -4,23 +4,24 @@ DB_NAME = 'memo_app'
 TABLE_NAME = 'memos'
 
 helpers do
-  def excute_query(sql)
+  def excute(query)
     connection = PG::Connection.new(dbname: DB_NAME)
-    connection.exec(sql)
+    connection.exec(query)
   end
 
   def fetch_all_memos
-    excute_query("SELECT * FROM #{TABLE_NAME}")
+    excute("SELECT * FROM #{TABLE_NAME}")
   end
 
-  def memo_exists?(id)
-    all_memos = fetch_all_memos
+  def memo_exists?(id, all_memos)
     all_ids = all_memos.map { |memo| memo['id'] }
     all_ids.include?(id)
   end
 
-  def find_memo(id)
-    excute_query("SELECT * FROM #{TABLE_NAME} WHERE id = '#{id}'").first
+  def find_memo(id, all_memos)
+    all_memos.map do |memo|
+      memo if memo['id'] == id
+    end.compact.first
   end
 
   def title_with_default_text(title)
@@ -28,14 +29,14 @@ helpers do
   end
 
   def create_memo(title, content)
-    excute_query(<<~SQL)
+    excute(<<~SQL)
       INSERT INTO #{TABLE_NAME} (id, title, content)
       VALUES ('#{SecureRandom.uuid}', '#{title_with_default_text(title)}', '#{content}')
     SQL
   end
 
   def update_memo(id, title, content)
-    excute_query(<<~SQL)
+    excute(<<~SQL)
       UPDATE #{TABLE_NAME}
       SET title = '#{title_with_default_text(title)}', content = '#{content}'
       WHERE id = '#{id}'
@@ -43,6 +44,6 @@ helpers do
   end
 
   def delete_memo(id)
-    excute_query("DELETE FROM #{TABLE_NAME} WHERE id = '#{id}'")
+    excute("DELETE FROM #{TABLE_NAME} WHERE id = '#{id}'")
   end
 end
