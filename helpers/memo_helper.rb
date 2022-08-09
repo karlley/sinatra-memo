@@ -5,9 +5,9 @@ TABLE_NAME = 'memos'
 
 # DB接続、CRUD処理のヘルパー
 module MemoHelper
-  def excute(query)
+  def excute(query, params = [])
     connection = PG::Connection.new(dbname: DB_NAME)
-    connection.exec(query)
+    connection.exec_params(query, params)
   end
 
   def title_with_default_text(title)
@@ -20,7 +20,8 @@ module MemoHelper
   end
 
   def fetch_all_memos
-    excute("SELECT * FROM #{TABLE_NAME}")
+    query = "SELECT * FROM #{TABLE_NAME}"
+    excute(query)
   end
 
   def find_memo(id, all_memos)
@@ -30,21 +31,28 @@ module MemoHelper
   end
 
   def create_memo(title, content)
-    excute(<<~SQL)
-      INSERT INTO #{TABLE_NAME} (id, title, content)
-      VALUES ('#{SecureRandom.uuid}', '#{title_with_default_text(title)}', '#{content}')
-    SQL
+    query = "INSERT INTO #{TABLE_NAME} (id, title, content) VALUES ($1, $2, $3)"
+    params = %W[
+      #{SecureRandom.uuid}
+      #{title_with_default_text(title)}
+      #{content}
+    ]
+    excute(query, params)
   end
 
   def update_memo(id, title, content)
-    excute(<<~SQL)
-      UPDATE #{TABLE_NAME}
-      SET title = '#{title_with_default_text(title)}', content = '#{content}'
-      WHERE id = '#{id}'
-    SQL
+    query = "UPDATE #{TABLE_NAME} SET title = $2, content = $3 WHERE id = $1"
+    params = %W[
+      #{id}
+      #{title_with_default_text(title)}
+      #{content}
+    ]
+    excute(query, params)
   end
 
   def delete_memo(id)
-    excute("DELETE FROM #{TABLE_NAME} WHERE id = '#{id}'")
+    query = "DELETE FROM #{TABLE_NAME} WHERE id = $1"
+    params = [id]
+    excute(query, params)
   end
 end
