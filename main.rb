@@ -10,16 +10,12 @@ require_relative 'helpers/memo_helper'
 
 helpers MemoHelper
 
-before do
-  @all_memos = fetch_all_memos
-end
-
 not_found do
   erb :not_found
 end
 
 get '/memos' do
-  @memos = @all_memos
+  @memos = fetch_all_memos
   erb :index
 end
 
@@ -34,8 +30,9 @@ post '/memos' do
 end
 
 get '/memos/:id/edit' do |id|
-  if memo_exists?(id, @all_memos)
-    @memo = find_memo(id, @all_memos)
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
+    @memo = find_memo(id, all_memos)
     erb :edit
   else
     erb :not_found
@@ -43,7 +40,8 @@ get '/memos/:id/edit' do |id|
 end
 
 patch '/memos/:id' do |id|
-  if memo_exists?(id, @all_memos)
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
     update_memo(id, params[:title], params[:content])
     redirect "/memos/#{id}"
     erb :show
@@ -53,8 +51,9 @@ patch '/memos/:id' do |id|
 end
 
 get '/memos/:id' do |id|
-  if memo_exists?(id, @all_memos)
-    @memo = find_memo(id, @all_memos)
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
+    @memo = find_memo(id, all_memos)
     erb :show
   else
     erb :not_found
@@ -62,7 +61,8 @@ get '/memos/:id' do |id|
 end
 
 delete '/memos/:id' do |id|
-  if memo_exists?(id, @all_memos)
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
     delete_memo(id)
     redirect '/memos'
     erb :index
