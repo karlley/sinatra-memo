@@ -25,9 +25,9 @@ module MemoHelper
   end
 
   def find_memo(id, all_memos)
-    all_memos.map do |memo|
-      memo if memo['id'] == id
-    end.compact.first
+    all_memos.find do |memo|
+      memo['id'] == id
+    end
   end
 
   def create_memo(title, content)
