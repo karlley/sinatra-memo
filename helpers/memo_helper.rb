@@ -2,12 +2,12 @@
 
 DB_NAME = 'memo_app'
 TABLE_NAME = 'memos'
+CONNECTION = PG::Connection.new(dbname: DB_NAME)
 
 # DB接続、CRUD処理のヘルパー
 module MemoHelper
   def excute(query, params = [])
-    connection = PG::Connection.new(dbname: DB_NAME)
-    connection.exec_params(query, params)
+    CONNECTION.exec_params(query, params)
   end
 
   def title_with_default_text(title)
