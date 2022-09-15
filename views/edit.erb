@@ -1,12 +1,12 @@
 <section class="edit-wrapper">
   <h2>Edit Memo</h2>
-  <form action="/memos/<%= @memo[:id] %>" method="post" class="edit-form">
+  <form action="/memos/<%= @memo['id'] %>" method="post" class="edit-form">
     <dl>
       <dt>
         <label>Title</label>
       </dt>
       <dd>
-        <input name="title" type="text" value="<%= CGI.escapeHTML(@memo[:title]) %>" class="edit-form-title"
+        <input name="title" type="text" value="<%= CGI.escapeHTML(@memo['title']) %>" class="edit-form-title"
           required="required">
       </dd>
     </dl>
@@ -15,7 +15,7 @@
         <label>Content</label>
       </dt>
       <dd>
-        <textarea name="content" class="edit-form-content"><%= CGI.escapeHTML(@memo[:content]) %></textarea>
+        <textarea name="content" class="edit-form-content"><%= CGI.escapeHTML(@memo['content']) %></textarea>
       </dd>
     </dl>
     <input type="hidden" name="_method" value="patch">

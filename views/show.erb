@@ -2,17 +2,17 @@
   <h2>Memo Details</h2>
   <article class="show-item">
     <div class="show-title">
-      <h3><span class="show-title-header">Title</span><span><%= CGI.escapeHTML(@memo[:title]) %></span></h3>
+      <h3><span class="show-title-header">Title</span><span><%= CGI.escapeHTML(@memo['title']) %></span></h3>
     </div>
     <div class="show-content">
-      <p><span class="show-content-header">Content</span><span><%= CGI.escapeHTML(@memo[:content]) %></span></p>
+      <p><span class="show-content-header">Content</span><span><%= CGI.escapeHTML(@memo['content']) %></span></p>
     </div>
   </article>
   <nav class="show-nav">
     <div class="show-edit-button">
-      <a href="/memos/<%= @memo[:id] %>/edit">Edit Memo</a>
+      <a href="/memos/<%= @memo['id'] %>/edit">Edit Memo</a>
     </div>
-    <form action="/memos/<%= @memo[:id] %>" method="post" class="show-delete-button">
+    <form action="/memos/<%= @memo['id'] %>" method="post" class="show-delete-button">
       <input type="hidden" name="_method" value="delete">
       <input type="submit" value="Delete Memo">
     </form>

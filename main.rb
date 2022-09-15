@@ -5,17 +5,17 @@ require 'sinatra/reloader'
 require 'json'
 require 'securerandom'
 require 'cgi'
-require_relative 'helpers/crud_helper'
+require 'pg'
+require_relative 'helpers/memo_helper'
+
+helpers MemoHelper
 
 not_found do
   erb :not_found
 end
 
 get '/memos' do
-  files = Dir.glob('data/*.json').sort_by { |file| File.birthtime(file) }.reverse
-  @memos = files.map do |file|
-    JSON.parse(File.read(file), symbolize_names: true)
-  end
+  @memos = fetch_all_memos
   erb :index
 end
 
@@ -24,15 +24,15 @@ get '/memos/new' do
 end
 
 post '/memos' do
-  create_data = { id: SecureRandom.uuid, title: title_with_default_text, content: params[:content] }
-  File.open("data/#{create_data[:id]}.json", 'w') { |file| JSON.dump(create_data, file) }
+  create_memo(params[:title], params[:content])
   redirect '/memos'
   erb :index
 end
 
 get '/memos/:id/edit' do |id|
-  if memo_exists?(id)
-    @memo = get_memo(id)
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
+    @memo = find_memo(id, all_memos)
     erb :edit
   else
     erb :not_found
@@ -40,9 +40,9 @@ get '/memos/:id/edit' do |id|
 end
 
 patch '/memos/:id' do |id|
-  if memo_exists?(id)
-    update_data = { id: id.to_s, title: title_with_default_text, content: params[:content] }
-    File.open("data/#{id}.json", 'w') { |file| JSON.dump(update_data, file) }
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
+    update_memo(id, params[:title], params[:content])
     redirect "/memos/#{id}"
     erb :show
   else
@@ -51,8 +51,9 @@ patch '/memos/:id' do |id|
 end
 
 get '/memos/:id' do |id|
-  if memo_exists?(id)
-    @memo = get_memo(id)
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
+    @memo = find_memo(id, all_memos)
     erb :show
   else
     erb :not_found
@@ -60,8 +61,9 @@ get '/memos/:id' do |id|
 end
 
 delete '/memos/:id' do |id|
-  if memo_exists?(id)
-    File.delete("data/#{id}.json")
+  all_memos = fetch_all_memos
+  if memo_exists?(id, all_memos)
+    delete_memo(id)
     redirect '/memos'
     erb :index
   else

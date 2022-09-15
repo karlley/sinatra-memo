@@ -13,24 +13,39 @@
 ## Features
 
 * タイトルを未設定でのメモの作成、編集は警告が表示されます。
-* 作成したメモは作成順に並びます。
 * 配色は[GitHub](https://github.com)を参考にしました。
+* テーブル作成、初期データの投入は初期化ファイルを用意しました。
+* SQLインジェクション対策済みです。
 
 ## Requirment
 
 * ruby
+* PostgreSQL
 * gem sinatra
 * gem webrick
+* gem pg
 
 ## Installation
 
-リポジトリをcloneしてgemをインストールするだけです。
+リポジトリをcloneしてgemをインストールします。
 
 ```shell
 $ cd your_workspace
 $ git clone https://github.com/karlley/sinatra-memo.git
 $ cd sinatra_memo
 $ bundle install
+```
+
+PostgreSQLへのDB作成、テーブル作成、初期データの投入を行います。
+
+```shell
+$ psql -c "CREATE DATABASE memo_app"
+$ psql -d memo_app -f initialize.sql
+```
+
+アプリケーションを起動します。
+
+```shell
 $ bundle exec ruby main.rb
 ```
 
